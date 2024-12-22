@@ -53,7 +53,6 @@ def embed_text(long_text, chunk_size=30, chunk_overlap=5, top_k=10):
     return query_engine
 
 
-# # 示例：嵌入一个非常长的字符串
 # long_text = """The University of California, Berkeley (UC Berkeley, Berkeley, Cal, or California)[10][11] is a public land-grant research university in Berkeley, California, United States. Founded in 1868 and named after the Anglo-Irish philosopher George Berkeley, it is the state's first land-grant university and is the founding campus of the University of California system.[12]
 
 # Berkeley has an enrollment of more than 45,000 students. The university is organized around fifteen schools of study on the same campus, including the College of Chemistry, the College of Engineering, and the Haas School of Business. It is classified among "R1: Doctoral Universities – Very high research activity".[13] The Lawrence Berkeley National Laboratory was originally founded as part of the university.[14]
@@ -68,3 +67,15 @@ def embed_text(long_text, chunk_size=30, chunk_overlap=5, top_k=10):
 # # 示例查询
 # query_result = query_engine.query("berkeley")
 # print("查询结果:", query_result)
+
+
+# response will be a combined response from all the chunks. 经过二次创作
+# response = query_engine.query("U.S. News")
+# print("Final Answer:", response.response)
+
+# # 查看所有被检索到的文本块
+# for i, node_with_score in enumerate(response.source_nodes):
+#     print("------")
+#     print(f"Chunk #{i+1} (Similarity Score: {node_with_score.score}):")
+#     print(node_with_score.node.text)
+#     print("------")
