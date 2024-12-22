@@ -10,10 +10,14 @@ HF_API_TOKEN = os.getenv("HF_API_TOKEN")
 
 
 def llama_answer(
-    question: str, model_name="meta-llama/Meta-Llama-3-8B-Instruct"
+    question: str,
+    model_name="meta-llama/Meta-Llama-3-8B-Instruct",
+    external_knowledge=None,
 ) -> str:
 
     prompt = "You are an expert answering common sense question.\n"
+    if external_knowledge:
+        prompt += f"You may find this information useful: {external_knowledge}.\n"
     prompt += f"Question: {question}\n"
     client = InferenceClient(api_key=HF_API_TOKEN)
 
@@ -31,10 +35,13 @@ def llama_answer(
     return result_string
 
 
-def gpt_answer(question: str, model_name="gpt-4o-mini") -> str:
+def gpt_answer(question: str, model_name="gpt-4o-mini", external_knowledge=None) -> str:
     client = OpenAI()
+    prompt = f"You are an expert at common sense.\n"
+    if external_knowledge:
+        prompt += f"You may find this information useful: {external_knowledge}\n"
     messages = [
-        {"role": "system", "content": f"You are an expert at common sense."},
+        {"role": "system", "content": prompt},
         {"role": "user", "content": question},
     ]
     try:
