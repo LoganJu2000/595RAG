@@ -2,6 +2,11 @@ from openai import OpenAI
 from typing import List
 from llama_index.core import VectorStoreIndex, Document
 
+from llama_index.core import Settings
+
+Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
+Settings.llm = None
+
 
 def extract_key_words(question: str) -> List[str]:
     """
