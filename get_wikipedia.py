@@ -27,8 +27,8 @@ def get_wikipedia_page(query):
 
     # 获取第一个结果的标题
     page_title = search_results["query"]["search"][0]["title"]
-    print(len(search_results["query"]["search"]))
-    print("this is result:", search_results["query"]["search"])
+    # print(len(search_results["query"]["search"]))
+    # print("this is result:", search_results["query"]["search"])
     print(f"找到的页面标题: {page_title}")
 
     # 获取页面内容
