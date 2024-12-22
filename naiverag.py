@@ -8,7 +8,7 @@ Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
 Settings.llm = None
 
 
-def extract_key_words(question: str) -> List[str]:
+def extract_title(question: str) -> str:
     """
     Extract key words from a given question using OpenAI GPT or similar NLP techniques.
 
@@ -17,16 +17,20 @@ def extract_key_words(question: str) -> List[str]:
     """
     client = OpenAI()
     prompt = f"""
-    You are a helpful assistant. Extract the main keywords from the following question:
-    "{question}"
-    Provide the keywords as a comma-separated list.
+        You are a knowledgeable and concise assistant. I will provide you with a question, 
+        and your task is to identify the most relevant Wikipedia article title where I can 
+        find a correct and comprehensive answer to this question.
+
+        Please provide your response as a single title.
+
+        Here is the question:
+        "{question}"
     """
 
     try:
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": prompt}],
-            max_tokens=50,
         )
         output = response.choices[0].message.content.strip()
         # Split the response into a list of keywords
@@ -34,7 +38,7 @@ def extract_key_words(question: str) -> List[str]:
         return keywords
     except Exception as e:
         print(f"Error: {e}")
-        return []
+        return ""
 
 
 def chunk_text(text, chunk_size, chunk_overlap):
@@ -47,7 +51,7 @@ def chunk_text(text, chunk_size, chunk_overlap):
     return chunks
 
 
-def embed_text(long_text, chunk_size=30, chunk_overlap=5, top_k=10):
+def embed_text(long_text, chunk_size=500, chunk_overlap=20, top_k=10):
     text_chunks = chunk_text(long_text, chunk_size, chunk_overlap)
 
     chunked_documents = [Document(text=chunk) for chunk in text_chunks]
