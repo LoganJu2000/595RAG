@@ -34,8 +34,7 @@ def extract_title(question: str) -> str:
         )
         output = response.choices[0].message.content.strip()
         # Split the response into a list of keywords
-        keywords = [word.strip() for word in output.split(",")]
-        return keywords
+        return output
     except Exception as e:
         print(f"Error: {e}")
         return ""
