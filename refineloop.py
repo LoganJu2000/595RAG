@@ -99,7 +99,7 @@ def feedback_evaluate(
     Don't return any other words.
     """
 
-    client = InferenceClient(api_key="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")
+    client = InferenceClient(api_key="YOUR_HF_API_KEY")
 
     messages = [{"role": "user", "content": prompt}]
 
@@ -155,7 +155,7 @@ def adjust_query(
     Based on the feedback, rewrite the query to improve it.
     """
 
-    client = InferenceClient(api_key="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")
+    client = InferenceClient(api_key="YOUR_HF_API_KEY")
 
     messages = [{"role": "user", "content": prompt}]
 
