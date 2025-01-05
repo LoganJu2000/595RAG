@@ -1,22 +1,20 @@
-import openai
-from openai import OpenAI
 import os
+from openai import OpenAI
+import requests
+import numpy as np
 
-os.environ["OPENAI_API_KEY"] = (
-    "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"
-)
 client = OpenAI()
 
 
 def check_answer_equivalence(question, answer1, answer2, model="gpt-4o-mini"):
     """
-    判定两个答案是否等价，基于 GPT 模型的输出。
+    Determines whether two answers are equivalent based on the output of a GPT model.
 
-    :param question: 问题
-    :param answer1: 第一个答案
-    :param answer2: 第二个答案
-    :param model: 使用的 GPT 模型，默认为 gpt-4o-mini
-    :return: 是否等价（True 或 False）
+    :param question: The question being evaluated.
+    :param answer1: The first answer.
+    :param answer2: The second answer.
+    :param model: The GPT model to use, default is gpt-4o-mini.
+    :return: True if the answers are equivalent, otherwise False.
     """
     prompt = f"""
     Are the following two answers to the given question equivalent? Do not consider whether the answers are right or wrong, but only whether they are equivalent. Directly state \u201dYes\u201d or \u201dNo\u201d.
@@ -44,11 +42,30 @@ def check_answer_equivalence(question, answer1, answer2, model="gpt-4o-mini"):
         return None
 
 
-if __name__ == "__main__":
-    question = "Which title was conferred to Anna Muzychuk in 2007?"
-    answer1 = "Anna Muzychuk was conferred the title of International Master (IM) in 2007. She earned the title by scoring three norms in rapid chess tournaments."
-    answer2 = "International Master"
+API_URL = (
+    "https://api-inference.huggingface.co/models/sentence-transformers/all-MiniLM-L6-v2"
+)
+headers = {"Authorization": f"Bearer {HF_API_KEY}"}
 
-    result = check_answer_equivalence(question, answer1, answer2)
-    if result is not None:
-        print(f"答案是否等价: {'是' if result else '否'}")
+
+def query(payload):
+    response = requests.post(API_URL, headers=headers, json=payload)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        raise Exception(
+            f"Hugging Face API error: {response.status_code} - {response.text}"
+        )
+
+
+def calculate_similarity(answer1, answer2):
+
+    payload = {"inputs": {"source_sentence": answer1, "sentences": [answer2]}}
+
+    try:
+        output = query(payload)
+        similarity_score = output[0]
+        return similarity_score
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
