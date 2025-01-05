@@ -5,6 +5,11 @@ from typing import List
 import requests
 from openai import OpenAI
 from huggingface_hub import InferenceClient
+from llama_index.core import VectorStoreIndex, Document
+from llama_index.core import Settings
+from naiverag import extract_title, embed_text
+from get_wikipedia import get_wikipedia_page
+from pure_llm import llama_answer, gpt_answer
 
 
 def feedback_evaluate(
@@ -208,11 +213,9 @@ def iterative_query_improvement(row, max_iterations=1):
             return improved_rag_answer
 
         elif feedback == "partially relevant":
-            print("改写1")
             current_query = adjust_query(current_query, feedback)
 
         elif feedback == "irrelevant":
-            print("改写2")
             key_words = extract_title(current_query)
             if not key_words:
                 return None

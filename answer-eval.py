@@ -5,6 +5,11 @@ import numpy as np
 
 client = OpenAI()
 
+API_URL = (
+    "https://api-inference.huggingface.co/models/sentence-transformers/all-MiniLM-L6-v2"
+)
+headers = {"Authorization": f"Bearer YOUR_HF_API_KEY"}
+
 
 def check_answer_equivalence(question, answer1, answer2, model="gpt-4o-mini"):
     """
@@ -40,12 +45,6 @@ def check_answer_equivalence(question, answer1, answer2, model="gpt-4o-mini"):
     except Exception as e:
         print(f"Error: {e}")
         return None
-
-
-API_URL = (
-    "https://api-inference.huggingface.co/models/sentence-transformers/all-MiniLM-L6-v2"
-)
-headers = {"Authorization": f"Bearer {HF_API_KEY}"}
 
 
 def query(payload):

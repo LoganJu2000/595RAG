@@ -6,8 +6,6 @@ import requests
 from openai import OpenAI
 from huggingface_hub import InferenceClient
 
-HF_API_TOKEN = os.getenv("HF_API_TOKEN")
-
 
 def llama_answer(
     question: str,
@@ -19,7 +17,7 @@ def llama_answer(
     if external_knowledge:
         prompt += f"You may find this information useful: {external_knowledge}.\n"
     prompt += f"Question: {question}\n"
-    client = InferenceClient(api_key=HF_API_TOKEN)
+    client = InferenceClient(api_key="HF_API_TOKEN")
 
     messages = [{"role": "user", "content": prompt}]
 
